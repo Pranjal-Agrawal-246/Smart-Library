@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Library | Availability System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --dark: #1d3557;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 15px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            padding: 1.2rem 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            color: var(--gray);
+        }
+
+        .nav-links li:hover, .nav-links li.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: var(--light);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-btn:hover {
+            background: var(--gray-light);
+        }
+
+        .nav-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-btn.primary:hover {
+            background: var(--secondary);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .section-title i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .section-title h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Seat Status */
+        .seat-status .card {
+            padding-bottom: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .status-filter {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--gray-light);
+            background: white;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+        }
+
+        .seat-card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .seat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .seat-card.available {
+            border-left-color: var(--success);
+        }
+
+        .seat-card.occupied {
+            border-left-color: var(--danger);
+        }
+
+        .seat-card.reserved {
+            border-left-color: var(--warning);
+        }
+
+        .seat-number {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .seat-status-text {
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .seat-card.available .seat-status-text {
+            color: var(--success);
+        }
+
+        .seat-card.occupied .seat-status-text {
+            color: var(--danger);
+        }
+
+        .seat-card.reserved .seat-status-text {
+            color: var(--warning);
+        }
+
+        .seat-type {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.7rem;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        /* Book Search */
+        .book-search .card {
+            padding-bottom: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            font-size: 1rem;
+            background: white;
+        }
+
+        .search-box input:focus {
+            outline: none;
+        }
+
+        .search-box button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .search-box button:hover {
+            background: var(--secondary);
+        }
+
+        .book-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .book-card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 20px;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .book-cover {
+            height: 160px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-cover::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.1) 100%);
+        }
+
+        .book-cover i {
+            font-size: 3rem;
+            opacity: 0.9;
+        }
+
+        .book-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            color: var(--dark);
+        }
+
+        .book-author {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .book-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .book-status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .available-status {
+            background: rgba(76, 201, 240, 0.2);
+            color: var(--success);
+        }
+
+        .borrowed-status {
+            background: rgba(247, 37, 133, 0.2);
+            color: var(--danger);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Due Date Reminders */
+        .reminder-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .reminder-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .reminders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .reminder-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .reminder-item:hover {
+            background: var(--gray-light);
+        }
+
+        .reminder-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--warning);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .reminder-content {
+            flex: 1;
+        }
+
+        .reminder-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .reminder-date {
+            color: var(--danger);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Quick Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-1 {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .stat-2 {
+            background: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+        }
+
+        .stat-3 {
+            background: rgba(248, 150, 30, 0.1);
+            color: var(--warning);
+        }
+
+        .stat-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .stat-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 30px 0;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1100px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .seat-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            
+            .book-results {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .seat-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .book-results {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.4s ease;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: var(--success);
+        }
+
+        .notification.error {
+            background: var(--danger);
+        }
+
+        .notification i {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h1>Smart<span>Library</span></h1>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">JS</div>
+                    <div>
+                        <div class="user-name">John Smith</div>
+                        <div class="user-role">Student</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <ul class="nav-links">
+                <li class="active"><i class="fas fa-home"></i> Dashboard</li>
+                <li><i class="fas fa-chair"></i> Seat Booking</li>
+                <li><i class="fas fa-book"></i> Book Search</li>
+                <li><i class="fas fa-user"></i> My Account</li>
+                <li><i class="fas fa-bell"></i> Notifications</li>
+            </ul>
+            <div class="nav-actions">
+                <button class="nav-btn"><i class="fas fa-sync-alt"></i> Refresh</button>
+                <button class="nav-btn primary"><i class="fas fa-question-circle"></i> Help</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Dashboard -->
+            <div class="dashboard">
+                <!-- Seat Status Section -->
+                <section class="seat-status">
+                    <div class="card">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <i class="fas fa-chair"></i>
+                                <h2>Seat Availability</h2>
+                            </div>
+                            <div class="status-filter">
+                                <button class="filter-btn active">All</button>
+                                <button class="filter-btn">Available</button>
+                                <button class="filter-btn">Occupied</button>
+                            </div>
+                        </div>
+                        <div class="seat-grid">
+                            <div class="seat-card available">
+                                <div class="seat-type">Quiet</div>
+                                <div class="seat-number">A-101</div>
+                                <div class="seat-status-text">Available</div>
+                            </div>
+                            <div class="seat-card occupied">
+                                <div class="seat-type">Group</div>
+                                <div class="seat-number">A-102</div>
+                                <div class="seat-status-text">Occupied</div>
+                            </div>
+                            <div class="seat-card available">
+                                <div class="seat-type">Quiet</div>
+                                <div class="seat-number">A-103</div>
+                                <div class="seat-status-text">Available</div>
+                            </div>
+                            <div class="seat-card reserved">
+                                <div class="seat-type">Computer</div>
+                                <div class="seat-number">A-104</div>
+                                <div class="seat-status-text">Reserved</div>
+                            </div>
+                            <div class="seat-card available">
+                                <div class="seat-type">Group</div>
+                                <div class="seat-number">B-201</div>
+                                <div class="seat-status-text">Available</div>
+                            </div>
+                            <div class="seat-card available">
+                                <div class="seat-type">Quiet</div>
+                                <div class="seat-number">B-202</div>
+                                <div class="seat-status-text">Available</div>
+                            </div>
+                            <div class="seat-card occupied">
+                                <div class="seat-type">Computer</div>
+                                <div class="seat-number">B-203</div>
+                                <div class="seat-status-text">Occupied</div>
+                            </div>
+                            <div class="seat-card available">
+                                <div class="seat-type">Quiet</div>
+                                <div class="seat-number">B-204</div>
+                                <div class="seat-status-text">Available</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Book Search Section -->
+                <section class="book-search">
+                    <div class="card">
+                        <div class="section-title">
+                            <i class="fas fa-book"></i>
+                            <h2>Book Availability</h2>
+                        </div>
+                        <div class="search-box">
+                            <input type="text" placeholder="Search for books by title, author, or ISBN...">
+                            <button><i class="fas fa-search"></i> Search</button>
+                        </div>
+                        <div class="book-results">
+                            <div class="book-card">
+                                <div class="book-cover">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="book-title">Introduction to Algorithms</div>
+                                <div class="book-author">Thomas H. Cormen</div>
+                                <div class="book-meta">
+                                    <span class="book-status available-status">Available</span>
+                                    <i class="fas fa-bookmark"></i>
+                                </div>
+                            </div>
+                            <div class="book-card">
+                                <div class="book-cover">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="book-title">Clean Code: A Handbook of Agile Software Craftsmanship</div>
+                                <div class="book-author">Robert C. Martin</div>
+                                <div class="book-meta">
+                                    <span class="book-status borrowed-status">Due: Oct 15</span>
+                                    <i class="fas fa-bookmark"></i>
+                                </div>
+                            </div>
+                            <div class="book-card">
+                                <div class="book-cover">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="book-title">The Pragmatic Programmer</div>
+                                <div class="book-author">Andrew Hunt</div>
+                                <div class="book-meta">
+                                    <span class="book-status available-status">Available</span>
+                                    <i class="fas fa-bookmark"></i>
+                                </div>
+                            </div>
+                            <div class="book-card">
+                                <div class="book-cover">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="book-title">Design Patterns: Elements of Reusable Object-Oriented Software</div>
+                                <div class="book-author">Erich Gamma</div>
+                                <div class="book-meta">
+                                    <span class="book-status borrowed-status">Due: Oct 12</span>
+                                    <i class="fas fa-bookmark"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Due Date Reminders -->
+                <section class="due-reminders">
+                    <div class="reminder-card">
+                        <div class="section-title">
+                            <i class="fas fa-bell"></i>
+                            <h2>Due Date Reminders</h2>
+                        </div>
+                        <div class="reminders-list">
+                            <div class="reminder-item">
+                                <div class="reminder-icon">
+                                    <i class="fas fa-exclamation"></i>
+                                </div>
+                                <div class="reminder-content">
+                                    <div class="reminder-title">Clean Code</div>
+                                    <div class="reminder-date">Due: October 15, 2023</div>
+                                </div>
+                            </div>
+                            <div class="reminder-item">
+                                <div class="reminder-icon">
+                                    <i class="fas fa-exclamation"></i>
+                                </div>
+                                <div class="reminder-content">
+                                    <div class="reminder-title">Design Patterns</div>
+                                    <div class="reminder-date">Due: October 12, 2023</div>
+                                </div>
+                            </div>
+                            <div class="reminder-item">
+                                <div class="reminder-icon">
+                                    <i class="fas fa-exclamation"></i>
+                                </div>
+                                <div class="reminder-content">
+                                    <div class="reminder-title">The Mythical Man-Month</div>
+                                    <div class="reminder-date">Due: October 20, 2023</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Stats -->
+                <section class="quick-stats">
+                    <div class="reminder-card">
+                        <div class="section-title">
+                            <i class="fas fa-chart-bar"></i>
+                            <h2>Library Stats</h2>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon stat-1">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>42</h3>
+                                    <p>Current Visitors</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon stat-2">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>128</h3>
+                                    <p>Available Books</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon stat-3">
+                                    <i class="fas fa-chair"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>24</h3>
+                                    <p>Free Seats</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h2>SmartLibrary</h2>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <a href="#">About</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+                <div class="copyright">
+                    &copy; 2023 Smart Library Availability System. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification System -->
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span>This is a notification message</span>
+    </div>
+
+    <script>
+        // Simple interactivity for demonstration
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter buttons
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Seat selection
+            const seatCards = document.querySelectorAll('.seat-card');
+            seatCards.forEach(seat => {
+                seat.addEventListener('click', function() {
+                    const seatNumber = this.querySelector('.seat-number').textContent;
+                    const status = this.classList.contains('available') ? 'available' : 
+                                  this.classList.contains('occupied') ? 'occupied' : 'reserved';
+                    
+                    if (status === 'available') {
+                        showNotification(`Seat ${seatNumber} selected for booking`, 'success');
+                    } else if (status === 'occupied') {
+                        showNotification(`Seat ${seatNumber} is currently occupied`, 'error');
+                    } else if (status === 'reserved') {
+                        showNotification(`Seat ${seatNumber} is reserved`, 'error');
+                    }
+                });
+            });
+
+            // Book selection
+            const bookCards = document.querySelectorAll('.book-card');
+            bookCards.forEach(book => {
+                book.addEventListener('click', function() {
+                    const title = this.querySelector('.book-title').textContent;
+                    const status = this.querySelector('.book-status').textContent;
+                    
+                    if (status === 'Available') {
+                        showNotification(`"${title}" selected for borrowing`, 'success');
+                    } else {
+                        showNotification(`"${title}" is currently borrowed. ${status}`, 'error');
+                    }
+                });
+            });
+
+            // Search functionality
+            const searchButton = document.querySelector('.search-box button');
+            const searchInput = document.querySelector('.search-box input');
+            
+            searchButton.addEventListener('click', function() {
+                if (searchInput.value.trim() !== '') {
+                    showNotification(`Searching for: ${searchInput.value}`, 'success');
+                } else {
+                    showNotification('Please enter a search term', 'error');
+                }
+            });
+
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+
+            // Notification function
+            function showNotification(message, type) {
+                const notification = document.getElementById('notification');
+                notification.querySelector('span').textContent = message;
+                notification.className = `notification ${type} show`;
+                
+                // Change icon based on type
+                const icon = notification.querySelector('i');
+                icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            // Refresh buttons
+            const refreshButtons = document.querySelectorAll('.nav-btn');
+            refreshButtons.forEach(button => {
+                if (button.textContent.includes('Refresh')) {
+                    button.addEventListener('click', function() {
+                        const originalText = button.innerHTML;
+                        button.innerHTML = '<div class="loading"></div> Refreshing...';
+                        
+                        setTimeout(() => {
+                            button.innerHTML = originalText;
+                            showNotification('Data refreshed successfully', 'success');
+                        }, 1500);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
